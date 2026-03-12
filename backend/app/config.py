@@ -10,7 +10,8 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
     SECRET_KEY: str = "change-me-in-production"
     CORS_ORIGINS: str = "http://localhost:3000"
-    BASE_URL: str = "https://votoclaro.pe"
+    BASE_URL: str = "https://api.votaclaro.com"
+    FRONTEND_URL: str = "https://www.votaclaro.com"
 
     @property
     def cors_origins_list(self) -> list[str]:

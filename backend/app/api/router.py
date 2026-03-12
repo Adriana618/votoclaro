@@ -78,7 +78,23 @@ async def compat_simulador(request: Request):
 
     body = await request.json()
     region_slug = body.get("region_id", "")
-    rejected = body.get("rejected_party_ids", [])
+    raw_rejected = body.get("rejected_party_ids", [])
+
+    # Normalize party IDs: frontend may send abbreviations ("fp") or
+    # numeric IDs (1, 2, "1") from old fallback data. Convert to abbreviations.
+    party_abbrs = list(PARTIES.keys())  # ordered list of party abbreviations
+    rejected = []
+    for pid in raw_rejected:
+        pid_str = str(pid)
+        if pid_str in PARTIES:
+            # Already a valid abbreviation
+            rejected.append(pid_str)
+        elif isinstance(pid, int) or pid_str.isdigit():
+            # Numeric ID — map to abbreviation by index (1-based)
+            idx = int(pid_str) - 1
+            if 0 <= idx < len(party_abbrs):
+                rejected.append(party_abbrs[idx])
+        # Skip unrecognized IDs
 
     try:
         result = compute_anti_vote_strategy(

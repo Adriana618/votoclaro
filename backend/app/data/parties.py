@@ -26,6 +26,9 @@ PARTIES: dict[str, dict] = {
             "corruption": 0,
             "environment": 1,
         },
+        "notable_figures": [
+            {"name": "Rafael Lopez Aliaga", "nickname": "Porky", "role": "Alcalde de Lima, lider del partido"},
+        ],
     },
     "fp": {
         "abbreviation": "fp",
@@ -39,6 +42,10 @@ PARTIES: dict[str, dict] = {
             "corruption": 2,
             "environment": 1,
         },
+        "notable_figures": [
+            {"name": "Keiko Fujimori", "nickname": "Keiko", "role": "Lider del partido, 3 veces candidata presidencial"},
+            {"name": "Alberto Fujimori", "nickname": "El Chino", "role": "Expresidente (1990-2000), fallecido"},
+        ],
     },
     "pm": {
         "abbreviation": "pm",
@@ -52,6 +59,9 @@ PARTIES: dict[str, dict] = {
             "corruption": -2,
             "environment": -1,
         },
+        "notable_figures": [
+            {"name": "Julio Guzman", "nickname": None, "role": "Fundador, excandidato presidencial"},
+        ],
     },
     "jpp": {
         "abbreviation": "jpp",
@@ -65,6 +75,10 @@ PARTIES: dict[str, dict] = {
             "corruption": 0,
             "environment": -1,
         },
+        "notable_figures": [
+            {"name": "Roberto Sanchez", "nickname": None, "role": "Excanciller del gobierno de Castillo"},
+            {"name": "Veronika Mendoza", "nickname": "Vero", "role": "Excongresista, lider historica de la izquierda"},
+        ],
     },
     "ap": {
         "abbreviation": "ap",
@@ -78,6 +92,9 @@ PARTIES: dict[str, dict] = {
             "corruption": 1,
             "environment": 0,
         },
+        "notable_figures": [
+            {"name": "Edmundo del Aguila", "nickname": None, "role": "Exsecretario general"},
+        ],
     },
     "sc": {
         "abbreviation": "sc",
@@ -91,6 +108,7 @@ PARTIES: dict[str, dict] = {
             "corruption": 1,
             "environment": 0,
         },
+        "notable_figures": [],
     },
     "pl": {
         "abbreviation": "pl",
@@ -104,6 +122,10 @@ PARTIES: dict[str, dict] = {
             "corruption": 2,
             "environment": 0,
         },
+        "notable_figures": [
+            {"name": "Vladimir Cerron", "nickname": None, "role": "Fundador, profugo de la justicia"},
+            {"name": "Pedro Castillo", "nickname": "El Profe", "role": "Expresidente (2021-2022), preso por golpe de estado"},
+        ],
     },
     "an": {
         "abbreviation": "an",
@@ -117,6 +139,7 @@ PARTIES: dict[str, dict] = {
             "corruption": 0,
             "environment": 1,
         },
+        "notable_figures": [],
     },
     "app": {
         "abbreviation": "app",
@@ -130,6 +153,9 @@ PARTIES: dict[str, dict] = {
             "corruption": 2,
             "environment": 1,
         },
+        "notable_figures": [
+            {"name": "Cesar Acuna", "nickname": "Plata como cancha", "role": "Gobernador de La Libertad, fundador UCV"},
+        ],
     },
     "pod": {
         "abbreviation": "pod",
@@ -143,6 +169,10 @@ PARTIES: dict[str, dict] = {
             "corruption": 2,
             "environment": 0,
         },
+        "notable_figures": [
+            {"name": "Jose Luna Galvez", "nickname": None, "role": "Fundador de Telesup, investigado por corrupcion"},
+            {"name": "Daniel Urresti", "nickname": None, "role": "Ex candidato a Lima, general retirado"},
+        ],
     },
     "fep": {
         "abbreviation": "fep",
@@ -156,6 +186,9 @@ PARTIES: dict[str, dict] = {
             "corruption": 1,
             "environment": 0,
         },
+        "notable_figures": [
+            {"name": "Fernando Olivera", "nickname": None, "role": "Excongresista, lider historico del FIM"},
+        ],
     },
     "avp": {
         "abbreviation": "avp",
@@ -169,6 +202,9 @@ PARTIES: dict[str, dict] = {
             "corruption": 0,
             "environment": 1,
         },
+        "notable_figures": [
+            {"name": "Hernando de Soto", "nickname": None, "role": "Economista, excandidato presidencial 2021"},
+        ],
     },
     # === Partidos adicionales (elecciones 2026) ===
     "apra": {
@@ -177,6 +213,9 @@ PARTIES: dict[str, dict] = {
         "leader": "Varios",
         "color": "#C62828",
         "positions": {"economy": 0, "social": 0, "authority": 1, "corruption": 1, "environment": 0},
+        "notable_figures": [
+            {"name": "Alan Garcia", "nickname": "El Caballo Loco", "role": "Expresidente (1985-1990, 2006-2011), fallecido"},
+        ],
     },
     "venc": {
         "abbreviation": "venc",

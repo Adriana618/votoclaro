@@ -30,6 +30,7 @@ async def trends_by_query(region_id: str = ""):
             "name": p.get("name", abbr),
             "abbreviation": p.get("abbreviation", abbr),
             "color": p.get("color"),
+            "notable_figures": p.get("notable_figures", []),
         }
 
     # Build top_rejected and top_voted as Party objects

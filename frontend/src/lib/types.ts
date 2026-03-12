@@ -1,3 +1,9 @@
+export interface NotableFigure {
+  name: string;
+  nickname: string | null;
+  role: string;
+}
+
 export interface Party {
   id: string;
   name: string;
@@ -5,6 +11,7 @@ export interface Party {
   logo_url?: string;
   color?: string;
   description?: string;
+  notable_figures?: NotableFigure[];
 }
 
 export interface Region {

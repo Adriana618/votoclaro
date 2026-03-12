@@ -101,20 +101,36 @@ export default function TendenciasPage() {
               <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
                 <h2 className="text-lg font-bold mb-4 text-green-400">Partidos más votados</h2>
                 <p className="text-xs text-gray-500 mb-3">Intención de voto según encuestas</p>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {latestTrend.top_voted.map((party, i) => (
-                    <div key={party.id} className="flex items-center gap-3">
-                      <span className="text-lg font-bold text-gray-600 w-6">#{i + 1}</span>
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white"
-                        style={{ backgroundColor: party.color || COLORS[i] }}
-                      >
-                        {party.abbreviation?.slice(0, 2).toUpperCase()}
+                    <div key={party.id}>
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg font-bold text-gray-600 w-6">#{i + 1}</span>
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
+                          style={{ backgroundColor: party.color || COLORS[i] }}
+                        >
+                          {party.abbreviation?.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-white font-medium">{party.name}</span>
+                        </div>
+                        <span className="text-green-400 font-bold text-sm">{party.percentage}%</span>
                       </div>
-                      <div className="flex-1">
-                        <span className="text-white font-medium">{party.name}</span>
-                      </div>
-                      <span className="text-green-400 font-bold text-sm">{party.percentage}%</span>
+                      {party.notable_figures && party.notable_figures.length > 0 && (
+                        <div className="ml-14 mt-1 space-y-1">
+                          {party.notable_figures.map((fig) => (
+                            <div key={fig.name} className="flex items-center gap-2 text-xs">
+                              <span className="text-gray-400">👤</span>
+                              <span className="text-gray-300">
+                                {fig.name}
+                                {fig.nickname && <span className="text-yellow-500"> &quot;{fig.nickname}&quot;</span>}
+                              </span>
+                              <span className="text-gray-600">— {fig.role}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -126,17 +142,35 @@ export default function TendenciasPage() {
               <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
                 <h2 className="text-lg font-bold mb-4 text-red-400">Partidos más rechazados</h2>
                 <p className="text-xs text-gray-500 mb-3">Anti-voto según encuestas</p>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {latestTrend.top_rejected.map((party, i) => (
-                    <div key={party.id} className="flex items-center gap-3">
-                      <span className="text-lg font-bold text-gray-600 w-6">#{i + 1}</span>
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white"
-                        style={{ backgroundColor: party.color || COLORS[i] }}
-                      >
-                        {party.abbreviation?.slice(0, 2).toUpperCase()}
+                    <div key={party.id}>
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg font-bold text-gray-600 w-6">#{i + 1}</span>
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
+                          style={{ backgroundColor: party.color || COLORS[i] }}
+                        >
+                          {party.abbreviation?.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-white font-medium">{party.name}</span>
+                        </div>
                       </div>
-                      <span className="text-white font-medium">{party.name}</span>
+                      {party.notable_figures && party.notable_figures.length > 0 && (
+                        <div className="ml-14 mt-1 space-y-1">
+                          {party.notable_figures.map((fig) => (
+                            <div key={fig.name} className="flex items-center gap-2 text-xs">
+                              <span className="text-gray-400">👤</span>
+                              <span className="text-gray-300">
+                                {fig.name}
+                                {fig.nickname && <span className="text-yellow-500"> &quot;{fig.nickname}&quot;</span>}
+                              </span>
+                              <span className="text-gray-600">— {fig.role}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

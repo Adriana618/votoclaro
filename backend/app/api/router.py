@@ -13,7 +13,7 @@ from app.api.simulator import router as simulator_router
 from app.api.notifications import router as notifications_router
 from app.api.trends import router as trends_router
 
-api_router = APIRouter(prefix="/api")
+api_router = APIRouter()
 
 api_router.include_router(simulator_router)
 api_router.include_router(quiz_router)

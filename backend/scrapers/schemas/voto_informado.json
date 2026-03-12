@@ -1,0 +1,198 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Voto Informado - Candidatos JNE",
+  "description": "Schema para la salida del spider de Voto Informado (JNE). Cada entrada representa un candidato al Congreso 2026.",
+  "type": "object",
+  "properties": {
+    "fecha_extraccion": {
+      "type": "string",
+      "format": "date",
+      "description": "Fecha en que se ejecuto el spider (YYYY-MM-DD)"
+    },
+    "total_candidatos": {
+      "type": "integer",
+      "description": "Numero total de candidatos extraidos"
+    },
+    "candidatos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "jne_id",
+          "nombre_completo",
+          "dni",
+          "partido_sigla",
+          "partido_nombre",
+          "region",
+          "cargo"
+        ],
+        "properties": {
+          "jne_id": {
+            "type": "string",
+            "description": "ID unico del candidato en el sistema JNE"
+          },
+          "nombre_completo": {
+            "type": "string",
+            "description": "Nombre completo del candidato tal como aparece en JNE"
+          },
+          "dni": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$",
+            "description": "DNI del candidato (8 digitos, informacion publica del JNE)"
+          },
+          "partido_sigla": {
+            "type": "string",
+            "description": "Sigla del partido politico (e.g. 'FP', 'RP', 'APP')"
+          },
+          "partido_nombre": {
+            "type": "string",
+            "description": "Nombre completo del partido politico"
+          },
+          "region": {
+            "type": "string",
+            "description": "Region/departamento en MAYUSCULAS (e.g. 'LIMA', 'AREQUIPA'). Para senadores usar 'NACIONAL'."
+          },
+          "cargo": {
+            "type": "string",
+            "enum": ["SENADOR", "DIPUTADO"],
+            "description": "Tipo de cargo al que postula"
+          },
+          "posicion_lista": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Posicion del candidato en la lista del partido"
+          },
+          "educacion": {
+            "type": "string",
+            "description": "Nivel educativo y estudios declarados"
+          },
+          "experiencia_politica": {
+            "type": "string",
+            "description": "Cargos politicos previos declarados"
+          },
+          "antecedentes_penales": {
+            "type": "boolean",
+            "description": "true si tiene antecedentes penales registrados"
+          },
+          "antecedentes_detalle": {
+            "type": ["string", "null"],
+            "description": "Detalle de los antecedentes penales, null si no tiene"
+          },
+          "sentencias": {
+            "type": "boolean",
+            "description": "true si tiene sentencias judiciales"
+          },
+          "sentencias_detalle": {
+            "type": ["string", "null"],
+            "description": "Detalle de las sentencias, null si no tiene"
+          },
+          "bienes_muebles": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Valor total de bienes muebles declarados en soles"
+          },
+          "bienes_inmuebles": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Valor total de bienes inmuebles declarados en soles"
+          },
+          "ingresos_anuales": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Ingresos anuales declarados en soles"
+          },
+          "plan_de_gobierno_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL al plan de gobierno del partido"
+          },
+          "foto_url": {
+            "type": ["string", "null"],
+            "description": "URL de la foto del candidato, null si no hay"
+          },
+          "hoja_vida_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL a la hoja de vida completa en JNE"
+          }
+        }
+      }
+    }
+  },
+  "required": ["fecha_extraccion", "total_candidatos", "candidatos"],
+
+  "examples": [
+    {
+      "fecha_extraccion": "2026-03-10",
+      "total_candidatos": 3,
+      "candidatos": [
+        {
+          "jne_id": "JNE-2026-001234",
+          "nombre_completo": "GARCIA LOPEZ, MARIA ELENA",
+          "dni": "45678901",
+          "partido_sigla": "FP",
+          "partido_nombre": "Fuerza Popular",
+          "region": "LIMA",
+          "cargo": "DIPUTADO",
+          "posicion_lista": 3,
+          "educacion": "Abogada - Universidad Nacional Mayor de San Marcos",
+          "experiencia_politica": "Regidora de Lima Metropolitana 2019-2022",
+          "antecedentes_penales": false,
+          "antecedentes_detalle": null,
+          "sentencias": false,
+          "sentencias_detalle": null,
+          "bienes_muebles": 45000.00,
+          "bienes_inmuebles": 320000.00,
+          "ingresos_anuales": 96000.00,
+          "plan_de_gobierno_url": "https://votoinformado.jne.gob.pe/plan/fp-2026.pdf",
+          "foto_url": "https://votoinformado.jne.gob.pe/fotos/45678901.jpg",
+          "hoja_vida_url": "https://votoinformado.jne.gob.pe/hoja-vida/JNE-2026-001234"
+        },
+        {
+          "jne_id": "JNE-2026-005678",
+          "nombre_completo": "QUISPE HUAMANI, PEDRO ROBERTO",
+          "dni": "12345678",
+          "partido_sigla": "RP",
+          "partido_nombre": "Renovacion Popular",
+          "region": "AREQUIPA",
+          "cargo": "DIPUTADO",
+          "posicion_lista": 1,
+          "educacion": "Ingeniero Civil - Universidad Nacional de San Agustin",
+          "experiencia_politica": "Congresista 2021-2026",
+          "antecedentes_penales": true,
+          "antecedentes_detalle": "Proceso por peculado - Expediente 2019-0456",
+          "sentencias": false,
+          "sentencias_detalle": null,
+          "bienes_muebles": 120000.00,
+          "bienes_inmuebles": 850000.00,
+          "ingresos_anuales": 180000.00,
+          "plan_de_gobierno_url": "https://votoinformado.jne.gob.pe/plan/rp-2026.pdf",
+          "foto_url": "https://votoinformado.jne.gob.pe/fotos/12345678.jpg",
+          "hoja_vida_url": "https://votoinformado.jne.gob.pe/hoja-vida/JNE-2026-005678"
+        },
+        {
+          "jne_id": "JNE-2026-009012",
+          "nombre_completo": "TORRES MENDOZA, ANA LUCIA",
+          "dni": "87654321",
+          "partido_sigla": "PM",
+          "partido_nombre": "Partido Morado",
+          "region": "NACIONAL",
+          "cargo": "SENADOR",
+          "posicion_lista": 5,
+          "educacion": "Economista - Pontificia Universidad Catolica del Peru",
+          "experiencia_politica": "Directora de SUNAT 2016-2018",
+          "antecedentes_penales": false,
+          "antecedentes_detalle": null,
+          "sentencias": true,
+          "sentencias_detalle": "Sentencia por difamacion - multa civil 2020",
+          "bienes_muebles": 200000.00,
+          "bienes_inmuebles": 1500000.00,
+          "ingresos_anuales": 240000.00,
+          "plan_de_gobierno_url": "https://votoinformado.jne.gob.pe/plan/pm-2026.pdf",
+          "foto_url": null,
+          "hoja_vida_url": "https://votoinformado.jne.gob.pe/hoja-vida/JNE-2026-009012"
+        }
+      ]
+    }
+  ]
+}

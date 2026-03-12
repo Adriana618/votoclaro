@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Convoca - Investigaciones Periodisticas",
+  "description": "Schema para investigaciones periodisticas de Convoca vinculadas a candidatos. Cada entrada vincula un candidato con una investigacion o nota relevante.",
+  "type": "object",
+  "properties": {
+    "fecha_extraccion": {
+      "type": "string",
+      "format": "date",
+      "description": "Fecha en que se ejecuto el spider"
+    },
+    "total_investigaciones": {
+      "type": "integer",
+      "description": "Numero total de investigaciones extraidas"
+    },
+    "investigaciones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "nombre_candidato",
+          "tipo_investigacion",
+          "detalle",
+          "fuente_url",
+          "fecha_publicacion"
+        ],
+        "properties": {
+          "nombre_candidato": {
+            "type": "string",
+            "description": "Nombre del candidato vinculado a la investigacion (tal como aparece en la fuente)"
+          },
+          "tipo_investigacion": {
+            "type": "string",
+            "description": "Tipo de investigacion: fiscal, penal, civil, periodistica, patrimonio, conflicto_interes, etc."
+          },
+          "detalle": {
+            "type": "string",
+            "description": "Resumen de la investigacion o hallazgo"
+          },
+          "fuente_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL de la publicacion original en Convoca"
+          },
+          "fecha_publicacion": {
+            "type": "string",
+            "format": "date",
+            "description": "Fecha de publicacion de la investigacion (YYYY-MM-DD)"
+          }
+        }
+      }
+    }
+  },
+  "required": ["fecha_extraccion", "total_investigaciones", "investigaciones"]
+}

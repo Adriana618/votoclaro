@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Congreso - Votaciones Pro-Crimen",
+  "description": "Schema para los registros de votacion extraidos de PDFs del Congreso. Cada entrada representa el voto de un congresista en una ley especifica.",
+  "type": "object",
+  "properties": {
+    "fecha_extraccion": {
+      "type": "string",
+      "format": "date",
+      "description": "Fecha en que se proceso el PDF"
+    },
+    "archivo_fuente": {
+      "type": "string",
+      "description": "Nombre del archivo PDF original"
+    },
+    "leyes_pro_crimen_referencia": {
+      "type": "array",
+      "description": "Lista de las 6 leyes pro-crimen identificadas para referencia del scraper",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "titulo": { "type": "string" },
+          "proyectos_ley_asociados": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Numeros de proyecto de ley asociados a esta ley"
+          }
+        }
+      },
+      "default": [
+        {
+          "id": 1,
+          "titulo": "Ley que modifica el codigo penal sobre crimen organizado",
+          "proyectos_ley_asociados": []
+        },
+        {
+          "id": 2,
+          "titulo": "Ley que limita la colaboracion eficaz",
+          "proyectos_ley_asociados": []
+        },
+        {
+          "id": 3,
+          "titulo": "Ley que reduce penas por lavado de activos",
+          "proyectos_ley_asociados": []
+        },
+        {
+          "id": 4,
+          "titulo": "Ley que debilita la extincion de dominio",
+          "proyectos_ley_asociados": []
+        },
+        {
+          "id": 5,
+          "titulo": "Ley que modifica la prision preventiva",
+          "proyectos_ley_asociados": []
+        },
+        {
+          "id": 6,
+          "titulo": "Ley que dificulta la persecucion de testaferros",
+          "proyectos_ley_asociados": []
+        }
+      ]
+    },
+    "total_registros": {
+      "type": "integer",
+      "description": "Numero total de registros de votacion"
+    },
+    "votaciones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "congresista",
+          "grupo_parlamentario",
+          "proyecto_ley",
+          "titulo_ley",
+          "es_ley_procrimen",
+          "voto",
+          "fecha"
+        ],
+        "properties": {
+          "congresista": {
+            "type": "string",
+            "description": "Nombre completo del congresista tal como aparece en el PDF"
+          },
+          "grupo_parlamentario": {
+            "type": "string",
+            "description": "Grupo parlamentario / bancada"
+          },
+          "proyecto_ley": {
+            "type": "string",
+            "description": "Numero del proyecto de ley (e.g. 'PL-01234/2024-CR')"
+          },
+          "titulo_ley": {
+            "type": "string",
+            "description": "Titulo o descripcion de la ley votada"
+          },
+          "es_ley_procrimen": {
+            "type": "boolean",
+            "description": "true si esta votacion corresponde a una de las 6 leyes pro-crimen identificadas"
+          },
+          "voto": {
+            "type": "string",
+            "enum": ["A FAVOR", "EN CONTRA", "ABSTENCION", "AUSENTE"],
+            "description": "Sentido del voto del congresista"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date",
+            "description": "Fecha de la votacion (YYYY-MM-DD)"
+          }
+        }
+      }
+    }
+  },
+  "required": ["fecha_extraccion", "total_registros", "votaciones"]
+}

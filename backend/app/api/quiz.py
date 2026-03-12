@@ -15,7 +15,7 @@ router = APIRouter(prefix="/quiz", tags=["quiz"])
 
 @router.get("/questions", response_model=list[QuizQuestion])
 async def list_questions():
-    """Return all quiz questions."""
+    """Return all 15 quiz questions with options."""
     return get_quiz_questions()
 
 
@@ -23,23 +23,20 @@ async def list_questions():
 async def submit_quiz(submission: QuizSubmission):
     """Calculate ideological affinity based on quiz answers.
 
-    Accepts a list of (question_id, value) pairs where value is 1-5
-    on a Likert scale. Returns affinity scores for all parties.
+    Accepts answers with values -2 to +2 (0 = "no sé").
+    Returns affinity scores for all parties.
     """
     if not submission.answers:
         raise HTTPException(status_code=400, detail="Debes responder al menos una pregunta.")
 
-    # Validate answer values
     for answer in submission.answers:
-        if answer.value < 1 or answer.value > 5:
+        if answer.value < -2 or answer.value > 2:
             raise HTTPException(
                 status_code=400,
-                detail=f"La respuesta a {answer.question_id} debe estar entre 1 y 5.",
+                detail=f"La respuesta a {answer.question_id} debe estar entre -2 y 2.",
             )
 
-    # Convert to dict format for the service
     answers_dict = {a.question_id: a.value for a in submission.answers}
-
     affinities = calculate_affinity(answers_dict)
 
     if not affinities:

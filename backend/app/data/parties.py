@@ -175,7 +175,8 @@ PARTIES: dict[str, dict] = {
 # Mapping from abbreviation to full name for quick lookup
 PARTY_NAMES: dict[str, str] = {k: v["name"] for k, v in PARTIES.items()}
 
-# Positions-only dict for quiz affinity calculation
-PARTY_POSITIONS: dict[str, dict[str, int]] = {
+# General ideological positions (for internal reference, not quiz matching)
+# Quiz matching uses PARTY_POSITIONS from quiz_questions.py instead
+PARTY_IDEOLOGICAL_POSITIONS: dict[str, dict[str, int]] = {
     k: v["positions"] for k, v in PARTIES.items()
 }

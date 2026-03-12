@@ -3,15 +3,24 @@
 from pydantic import BaseModel
 
 
+class QuizOption(BaseModel):
+    text: str
+    value: int  # -2 to +2
+
+
 class QuizQuestion(BaseModel):
     id: str
-    text: str
+    question: str
     category: str
+    emoji: str = ""
+    options: list[QuizOption]
+    context: str | None = None
+    source: str | None = None
 
 
 class QuizAnswer(BaseModel):
     question_id: str
-    value: int  # 1-5 Likert scale
+    value: int  # -2 to +2 (0 = "no sé")
 
 
 class QuizSubmission(BaseModel):
@@ -21,7 +30,6 @@ class QuizSubmission(BaseModel):
 class PartyAffinity(BaseModel):
     party: str
     name: str
-    score: float
     match_percentage: float
 
 

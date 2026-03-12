@@ -39,7 +39,9 @@ export async function getQuizQuestions(): Promise<QuizQuestion[]> {
 export async function submitQuiz(answers: QuizAnswer[]): Promise<AffinityResult> {
   return fetchApi<AffinityResult>('/quiz/submit', {
     method: 'POST',
-    body: JSON.stringify({ answers }),
+    body: JSON.stringify({
+      answers: answers.map((a) => ({ question_id: a.question_id, value: a.value })),
+    }),
   });
 }
 

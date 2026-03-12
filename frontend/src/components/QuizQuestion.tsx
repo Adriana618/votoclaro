@@ -7,14 +7,14 @@ import type { QuizQuestion as QuizQuestionType } from '@/lib/types';
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
-  onAnswer: (optionId: string) => void;
-  selectedOptionId?: string;
+  onAnswer: (value: number) => void;
+  selectedValue?: number;
 }
 
 export default function QuizQuestion({
   question,
   onAnswer,
-  selectedOptionId,
+  selectedValue,
 }: QuizQuestionProps) {
   const [showContext, setShowContext] = useState(false);
 
@@ -28,7 +28,7 @@ export default function QuizQuestion({
     >
       {/* Category */}
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-2xl">{question.category_emoji}</span>
+        <span className="text-2xl">{question.emoji}</span>
         <span className="text-sm font-medium text-[#D4AF37] uppercase tracking-wide">
           {question.category}
         </span>
@@ -36,31 +36,31 @@ export default function QuizQuestion({
 
       {/* Question text */}
       <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 leading-tight">
-        {question.text}
+        {question.question}
       </h2>
 
       {/* Options */}
       <div className="space-y-3">
         {question.options.map((option, index) => (
           <motion.button
-            key={option.id}
+            key={`${question.id}-opt-${index}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            onClick={() => onAnswer(option.id)}
+            onClick={() => onAnswer(option.value)}
             className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-              selectedOptionId === option.id
+              selectedValue === option.value
                 ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-white'
                 : 'border-gray-700 bg-gray-900 text-gray-300 hover:border-gray-500 hover:text-white'
             }`}
-            aria-pressed={selectedOptionId === option.id}
+            aria-pressed={selectedValue === option.value}
           >
             <span className="font-medium">{option.text}</span>
           </motion.button>
         ))}
       </div>
 
-      {/* Context/Source */}
+      {/* Context / Source */}
       {(question.context || question.source) && (
         <div className="mt-6">
           <button
@@ -68,7 +68,7 @@ export default function QuizQuestion({
             className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-300 transition-colors"
           >
             {showContext ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            <span>Contexto y fuente</span>
+            <span>{'\u00bf'}Por qu{'\u00e9'} importa?</span>
           </button>
           {showContext && (
             <motion.div

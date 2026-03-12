@@ -27,14 +27,14 @@ export default function QuizPage() {
         // Placeholder questions
         const placeholders: QuizQuestion[] = Array.from({ length: 15 }, (_, i) => ({
           id: `q${i + 1}`,
-          category: ['Seguridad', 'Economía', 'Educación', 'Salud', 'Política'][i % 5],
-          category_emoji: ['🛡️', '💰', '📚', '🏥', '🏛️'][i % 5],
-          text: `Pregunta ${i + 1}: ¿Cuál es tu posición sobre este tema?`,
+          category: ['Seguridad', 'Economia', 'Educacion', 'Salud', 'Politica'][i % 5],
+          emoji: ['\u{1F6E1}\u{FE0F}', '\u{1F4B0}', '\u{1F4DA}', '\u{1F3E5}', '\u{1F3DB}\u{FE0F}'][i % 5],
+          question: `Pregunta ${i + 1}: \u00bfCu\u00e1l es tu posici\u00f3n sobre este tema?`,
           options: [
-            { id: `q${i + 1}_a`, text: 'Opción A', party_weights: {} },
-            { id: `q${i + 1}_b`, text: 'Opción B', party_weights: {} },
-            { id: `q${i + 1}_c`, text: 'Opción C', party_weights: {} },
-            { id: `q${i + 1}_d`, text: 'Opción D', party_weights: {} },
+            { text: 'Totalmente en desacuerdo', value: -2 },
+            { text: 'En desacuerdo', value: -1 },
+            { text: 'De acuerdo', value: 1 },
+            { text: 'Totalmente de acuerdo', value: 2 },
           ],
           context: 'Contexto de ejemplo para esta pregunta.',
           source: 'Fuente de ejemplo',
@@ -44,11 +44,11 @@ export default function QuizPage() {
       });
   }, []);
 
-  const handleAnswer = (optionId: string) => {
+  const handleAnswer = (value: number) => {
     const question = questions[currentIndex];
     const newAnswers = [
       ...answers.filter((a) => a.question_id !== question.id),
-      { question_id: question.id, option_id: optionId },
+      { question_id: question.id, value },
     ];
     setAnswers(newAnswers);
 
@@ -69,12 +69,10 @@ export default function QuizPage() {
       // Show placeholder result
       setResult({
         rankings: [
-          { party: { id: '1', name: 'Partido Ejemplo', abbreviation: 'PE' }, affinity_percent: 78, matching_topics: ['Economía', 'Educación'] },
-          { party: { id: '2', name: 'Otro Partido', abbreviation: 'OP' }, affinity_percent: 65, matching_topics: ['Seguridad'] },
-          { party: { id: '3', name: 'Tercer Partido', abbreviation: 'TP' }, affinity_percent: 52, matching_topics: ['Salud'] },
+          { party: 'PE', name: 'Partido Ejemplo', match_percentage: 78 },
+          { party: 'OP', name: 'Otro Partido', match_percentage: 65 },
+          { party: 'TP', name: 'Tercer Partido', match_percentage: 52 },
         ],
-        top_match: { id: '1', name: 'Partido Ejemplo', abbreviation: 'PE' },
-        match_percent: 78,
       });
     } finally {
       setSubmitting(false);
@@ -95,9 +93,10 @@ export default function QuizPage() {
 
   // Results screen
   if (result) {
+    const topMatch = result.rankings[0];
     const chartData = result.rankings.map((r) => ({
-      name: r.party.abbreviation || r.party.name,
-      afinidad: r.affinity_percent,
+      name: r.party,
+      afinidad: r.match_percentage,
     }));
 
     return (
@@ -107,17 +106,19 @@ export default function QuizPage() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center mb-8"
         >
-          <span className="text-5xl mb-4 block">🎯</span>
+          <span className="text-5xl mb-4 block">{'\u{1F3AF}'}</span>
           <h1 className="text-3xl font-extrabold mb-2">Tus resultados</h1>
-          <p className="text-gray-400">Según tus respuestas, esta es tu afinidad con cada partido</p>
+          <p className="text-gray-400">{'Seg\u00fan tus respuestas, esta es tu afinidad con cada partido'}</p>
         </motion.div>
 
         {/* Top match */}
-        <div className="bg-gradient-to-b from-[#D4AF37]/10 to-transparent border border-[#D4AF37]/30 rounded-2xl p-6 mb-8 text-center">
-          <p className="text-sm text-gray-400 mb-1">Mayor afinidad</p>
-          <p className="text-2xl font-extrabold text-[#D4AF37] mb-1">{result.top_match.name}</p>
-          <p className="text-4xl font-black text-white">{result.match_percent}%</p>
-        </div>
+        {topMatch && (
+          <div className="bg-gradient-to-b from-[#D4AF37]/10 to-transparent border border-[#D4AF37]/30 rounded-2xl p-6 mb-8 text-center">
+            <p className="text-sm text-gray-400 mb-1">Mayor afinidad</p>
+            <p className="text-2xl font-extrabold text-[#D4AF37] mb-1">{topMatch.name}</p>
+            <p className="text-4xl font-black text-white">{topMatch.match_percentage}%</p>
+          </div>
+        )}
 
         {/* Chart */}
         <div className="bg-gray-900 rounded-2xl p-4 mb-8">
@@ -138,7 +139,7 @@ export default function QuizPage() {
         <div className="space-y-3 mb-8">
           {result.rankings.map((r, i) => (
             <motion.div
-              key={r.party.id}
+              key={r.party}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
@@ -146,24 +147,24 @@ export default function QuizPage() {
             >
               <span className="text-2xl font-black text-gray-600 w-8">#{i + 1}</span>
               <div className="flex-1">
-                <p className="font-bold text-white">{r.party.name}</p>
-                <p className="text-xs text-gray-500">
-                  Coinciden en: {r.matching_topics.join(', ')}
-                </p>
+                <p className="font-bold text-white">{r.name}</p>
+                <p className="text-xs text-gray-500">{r.party}</p>
               </div>
               <span className={`text-lg font-bold ${i === 0 ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
-                {r.affinity_percent}%
+                {r.match_percentage}%
               </span>
             </motion.div>
           ))}
         </div>
 
         <div className="text-center">
-          <WhatsAppButton
-            message={quizMessage(result.top_match.name, result.match_percent)}
-            label="Compartir mi resultado"
-            size="lg"
-          />
+          {topMatch && (
+            <WhatsAppButton
+              message={quizMessage(topMatch.name, topMatch.match_percentage)}
+              label="Compartir mi resultado"
+              size="lg"
+            />
+          )}
         </div>
       </div>
     );
@@ -172,7 +173,7 @@ export default function QuizPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-12">
       <h1 className="text-3xl font-extrabold mb-2">
-        🎯 ¿Con quién <span className="text-[#D4AF37]">coincides</span>?
+        {'\u{1F3AF}'} {'\u00bfCon qui\u00e9n '}<span className="text-[#D4AF37]">coincides</span>?
       </h1>
       <p className="text-gray-400 mb-6">
         Responde {questions.length} preguntas y descubre tu afinidad con cada partido.
@@ -199,7 +200,7 @@ export default function QuizPage() {
           key={questions[currentIndex].id}
           question={questions[currentIndex]}
           onAnswer={handleAnswer}
-          selectedOptionId={currentAnswer?.option_id}
+          selectedValue={currentAnswer?.value}
         />
       </AnimatePresence>
 

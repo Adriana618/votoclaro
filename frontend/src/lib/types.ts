@@ -29,23 +29,22 @@ export interface Candidate {
 
 export interface QuizQuestion {
   id: string;
+  question: string;
   category: string;
-  category_emoji: string;
-  text: string;
+  emoji: string;
   options: QuizOption[];
   context?: string;
   source?: string;
 }
 
 export interface QuizOption {
-  id: string;
   text: string;
-  party_weights: Record<string, number>;
+  value: number; // -2 to +2
 }
 
 export interface QuizAnswer {
   question_id: string;
-  option_id: string;
+  value: number; // -2 to +2
 }
 
 export interface AntiVoteResult {
@@ -68,14 +67,12 @@ export interface DhondtRow {
 
 export interface AffinityResult {
   rankings: AffinityRanking[];
-  top_match: Party;
-  match_percent: number;
 }
 
 export interface AffinityRanking {
-  party: Party;
-  affinity_percent: number;
-  matching_topics: string[];
+  party: string;
+  name: string;
+  match_percentage: number;
 }
 
 export interface SpicyFilter {

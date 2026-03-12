@@ -4,6 +4,7 @@ from fastapi import APIRouter
 
 from app.api.auth import router as auth_router
 from app.api.candidates import router as candidates_router
+from app.api.og import router as og_router
 from app.api.parties import router as parties_router
 from app.api.quiz import router as quiz_router
 from app.api.regions import router as regions_router
@@ -21,3 +22,4 @@ api_router.include_router(regions_router)
 api_router.include_router(auth_router)
 api_router.include_router(share_router)
 api_router.include_router(trends_router)
+api_router.include_router(og_router)

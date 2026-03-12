@@ -167,4 +167,7 @@ async def compat_simulador(request: Request):
         "explanation": result.get("explanation", ""),
         "dhondt_table": dhondt_table,
         "wasted_vote_risk": wasted_vote_risk,
+        "seats_saved": result.get("seats_saved", 0),
+        "rejected_seats_before": result.get("rejected_seats_before", 0),
+        "rejected_seats_after": result.get("rejected_seats_after", 0),
     }

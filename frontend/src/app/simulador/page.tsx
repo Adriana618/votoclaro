@@ -193,6 +193,33 @@ export default function SimuladorPage() {
               )}
             </div>
 
+            {/* CTA when strategy can't reduce seats yet */}
+            {(result as Record<string, unknown>).seats_saved === 0 && (
+              <div className="bg-gradient-to-b from-red-500/10 to-transparent border border-red-500/30 rounded-2xl p-6 mb-8">
+                <h3 className="text-lg font-bold mb-2 text-red-400">Los partidos que rechazas son muy fuertes</h3>
+                <p className="text-gray-300 mb-3">
+                  Pero eso no significa que tu voto no cuente. Si crees que anular o votar en blanco es protestar, piénsalo de nuevo:
+                  <strong className="text-white"> el voto en blanco se reparte entre los partidos más grandes</strong> — exactamente los que rechazas.
+                </p>
+                <p className="text-[#D4AF37] font-semibold mb-4">
+                  Si de verdad quieres protestar, vota. Y convence a tus amigos de hacer lo mismo.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <WhatsAppButton
+                    message={`En ${result.region.name}, los partidos que rechazo tienen ${(result as Record<string, unknown>).rejected_seats_before} de ${result.region.seats} escaños. Si votas en blanco, les estás regalando tu voto. Entra a www.votaclaro.com y descubre cómo votar estratégicamente.`}
+                    label="Convencer a un amigo"
+                    size="md"
+                  />
+                  <Link
+                    href="/registrar"
+                    className="px-6 py-2.5 rounded-xl bg-[#D4AF37] text-gray-950 font-bold hover:bg-[#C4A030] transition-colors text-sm"
+                  >
+                    Registrar mi voto estratégico
+                  </Link>
+                </div>
+              </div>
+            )}
+
             {/* D'Hondt Table */}
             {result.dhondt_table && result.dhondt_table.length > 0 && (
               <div className="mb-8">

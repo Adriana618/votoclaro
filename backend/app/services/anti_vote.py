@@ -87,12 +87,23 @@ def compute_anti_vote_strategy(
     rejected_before = sum(s for p, s in original_alloc.items() if p in rejected_set)
     rejected_after = sum(s for p, s in strategy_alloc.items() if p in rejected_set)
 
-    if recommended:
+    seats_saved = rejected_before - rejected_after
+
+    if recommended and seats_saved > 0:
         explanation = (
             f"En {region['name']} ({seats} escanos), votando por "
             f"{PARTY_NAMES.get(recommended, recommended)} puedes reducir "
             f"los escanos de los partidos que rechazas de {rejected_before} "
             f"a {rejected_after}."
+        )
+    elif recommended:
+        explanation = (
+            f"En {region['name']}, los partidos que rechazas son muy fuertes "
+            f"({rejected_before} de {seats} escanos). Con los datos actuales, "
+            f"tu mejor opcion es votar por {PARTY_NAMES.get(recommended, recommended)} "
+            f"para evitar que ganen aun mas terreno. "
+            f"Pero necesitamos mas gente votando estrategicamente: comparte con tus "
+            f"amigos y registra tu voto para que juntos hagamos la diferencia."
         )
     else:
         explanation = "No se encontro una estrategia viable con los datos actuales."

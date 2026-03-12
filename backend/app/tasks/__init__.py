@@ -1,6 +1,7 @@
 """Celery tasks for VotoClaro."""
 
 from celery import Celery
+from celery.schedules import crontab
 
 from app.config import settings
 
@@ -18,6 +19,14 @@ celery_app.conf.update(
     enable_utc=True,
     task_track_started=True,
     task_default_queue="votoclaro",
+    # Periodic task schedule
+    beat_schedule={
+        "recalculate-all-regions-weekly": {
+            "task": "recalculate_all_regions",
+            "schedule": crontab(hour=3, minute=0, day_of_week="monday"),
+            "options": {"queue": "votoclaro"},
+        },
+    },
 )
 
 # Auto-discover tasks in this package

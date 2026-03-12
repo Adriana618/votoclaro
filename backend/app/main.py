@@ -1,10 +1,11 @@
-"""FastAPI application entry point with CORS and all routers."""
+"""FastAPI application entry point with CORS, security headers, and all routers."""
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.router import api_router
 from app.config import settings
+from app.middleware import RateLimitMiddleware, SecurityHeadersMiddleware
 
 app = FastAPI(
     title="VotoClaro v3",
@@ -14,13 +15,21 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# CORS middleware
+# --- Middleware stack (applied bottom-to-top) ---
+
+# 1. Security headers on every response
+app.add_middleware(SecurityHeadersMiddleware)
+
+# 2. Rate limiting on sensitive endpoints
+app.add_middleware(RateLimitMiddleware)
+
+# 3. CORS — only allow configured origins, restrict methods & headers
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "Accept"],
 )
 
 # Include all API routes

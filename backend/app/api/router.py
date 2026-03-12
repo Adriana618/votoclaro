@@ -10,6 +10,7 @@ from app.api.quiz import router as quiz_router
 from app.api.regions import router as regions_router
 from app.api.share import router as share_router
 from app.api.simulator import router as simulator_router
+from app.api.notifications import router as notifications_router
 from app.api.trends import router as trends_router
 
 api_router = APIRouter(prefix="/api")
@@ -23,3 +24,4 @@ api_router.include_router(auth_router)
 api_router.include_router(share_router)
 api_router.include_router(trends_router)
 api_router.include_router(og_router)
+api_router.include_router(notifications_router)

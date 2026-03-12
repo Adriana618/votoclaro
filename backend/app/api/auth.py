@@ -1,10 +1,12 @@
 """Optional DNI-based registration endpoints."""
 
 import hashlib
+import hmac
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.config import settings
 from app.database import get_db
 from app.models.user import User
 from app.schemas.user import UserOut, UserRegister
@@ -13,8 +15,17 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 def _hash_value(value: str) -> str:
-    """Hash a sensitive value (DNI or phone) using SHA-256."""
-    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+    """Hash a sensitive value (DNI or phone) using HMAC-SHA256 with secret salt.
+
+    Uses a keyed hash (HMAC) so that the same DNI always produces the same
+    hash within this deployment, but the hash cannot be reversed or brute-forced
+    without knowing the SECRET_KEY.
+    """
+    return hmac.new(
+        key=settings.SECRET_KEY.encode("utf-8"),
+        msg=value.encode("utf-8"),
+        digestmod=hashlib.sha256,
+    ).hexdigest()
 
 
 @router.post("/register", response_model=UserOut)

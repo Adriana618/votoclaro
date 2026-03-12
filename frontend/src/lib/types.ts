@@ -55,6 +55,9 @@ export interface AntiVoteResult {
   explanation: string;
   dhondt_table: DhondtRow[];
   wasted_vote_risk: number;
+  seats_saved: number;
+  rejected_seats_before: number;
+  rejected_seats_after: number;
 }
 
 export interface DhondtRow {

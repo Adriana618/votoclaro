@@ -7,7 +7,7 @@ import RegionSelector from '@/components/RegionSelector';
 import PartyCard from '@/components/PartyCard';
 import DhondtTable from '@/components/DhondtTable';
 import WhatsAppButton from '@/components/WhatsAppButton';
-import { calculateAntiVote, getParties } from '@/lib/api';
+import { calculateAntiVote, getParties, saveVote } from '@/lib/api';
 import { antiVoteMessage } from '@/lib/whatsapp';
 import type { Party, AntiVoteResult } from '@/lib/types';
 import { useEffect } from 'react';
@@ -22,6 +22,8 @@ export default function SimuladorPage() {
   const [result, setResult] = useState<AntiVoteResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [saveDni, setSaveDni] = useState('');
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   useEffect(() => {
     getParties()
@@ -65,6 +67,16 @@ export default function SimuladorPage() {
       const res = await calculateAntiVote(region, Array.from(selectedParties));
       setResult(res);
       setStep(3);
+      // Save to localStorage for Mi Voto page
+      try {
+        const savedVote = {
+          region: res.region,
+          recommendation: res.recommended_party,
+          last_updated: new Date().toISOString(),
+          anti_vote_parties: res.rejected_parties,
+        };
+        localStorage.setItem('votoclaro_mi_voto', JSON.stringify(savedVote));
+      } catch { /* ignore storage errors */ }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al calcular. Intenta de nuevo.');
     } finally {
@@ -194,7 +206,7 @@ export default function SimuladorPage() {
             </div>
 
             {/* CTA when strategy can't reduce seats yet */}
-            {(result as Record<string, unknown>).seats_saved === 0 && (
+            {result.seats_saved === 0 && (
               <div className="bg-gradient-to-b from-red-500/10 to-transparent border border-red-500/30 rounded-2xl p-6 mb-8">
                 <h3 className="text-lg font-bold mb-2 text-red-400">Los partidos que rechazas son muy fuertes</h3>
                 <p className="text-gray-300 mb-3">
@@ -206,7 +218,7 @@ export default function SimuladorPage() {
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <WhatsAppButton
-                    message={`En ${result.region.name}, los partidos que rechazo tienen ${(result as Record<string, unknown>).rejected_seats_before} de ${result.region.seats} escaños. Si votas en blanco, les estás regalando tu voto. Entra a www.votaclaro.com y descubre cómo votar estratégicamente.`}
+                    message={`En ${result.region.name}, los partidos que rechazo tienen ${result.rejected_seats_before} de ${result.region.seats} escaños. Si votas en blanco, les estás regalando tu voto. Entra a www.votaclaro.com y descubre cómo votar estratégicamente.`}
                     label="Convencer a un amigo"
                     size="md"
                   />
@@ -227,6 +239,54 @@ export default function SimuladorPage() {
                 <DhondtTable rows={result.dhondt_table} totalSeats={result.region.seats} />
               </div>
             )}
+
+            {/* Save with DNI */}
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-8">
+              <h3 className="text-lg font-bold mb-2">Guarda tu voto para no olvidarlo</h3>
+              <p className="text-sm text-gray-400 mb-4">
+                Ingresa tu DNI para guardar tu recomendación. Podrás consultarla en cualquier momento desde &quot;Mi Voto&quot;.
+              </p>
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={8}
+                  value={saveDni}
+                  onChange={(e) => { setSaveDni(e.target.value.replace(/\D/g, '')); setSaveStatus('idle'); }}
+                  placeholder="Tu DNI (8 dígitos)"
+                  className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                />
+                <button
+                  onClick={async () => {
+                    if (saveDni.length !== 8 || !result) return;
+                    setSaveStatus('saving');
+                    try {
+                      await saveVote({
+                        dni: saveDni,
+                        region: result.region,
+                        recommended_party: result.recommended_party,
+                        rejected_parties: result.rejected_parties,
+                        saved_at: new Date().toISOString(),
+                      });
+                      setSaveStatus('saved');
+                    } catch {
+                      setSaveStatus('error');
+                    }
+                  }}
+                  disabled={saveDni.length !== 8 || saveStatus === 'saving'}
+                  className="px-5 py-2.5 rounded-xl bg-[#D4AF37] text-gray-950 font-bold hover:bg-[#C4A030] disabled:opacity-40 transition-colors text-sm whitespace-nowrap"
+                >
+                  {saveStatus === 'saving' ? 'Guardando...' : saveStatus === 'saved' ? 'Guardado' : 'Guardar'}
+                </button>
+              </div>
+              {saveStatus === 'saved' && (
+                <p className="text-sm text-green-400 mt-2">Tu voto se guardo. Consultalo en <Link href="/mi-voto" className="underline">Mi Voto</Link>.</p>
+              )}
+              {saveStatus === 'error' && (
+                <p className="text-sm text-red-400 mt-2">Error al guardar. Intenta de nuevo.</p>
+              )}
+              <p className="text-xs text-gray-600 mt-2">Tu DNI se guarda encriptado. Nunca lo veremos en texto plano.</p>
+            </div>
 
             {/* WhatsApp */}
             <div className="text-center mb-6">

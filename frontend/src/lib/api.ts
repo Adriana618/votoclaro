@@ -94,3 +94,28 @@ export async function registerDni(data: RegistrationData): Promise<{ success: bo
 export async function getTrends(regionId: string): Promise<TrendData[]> {
   return fetchApi<TrendData[]>(`/trends?region_id=${regionId}`);
 }
+
+export async function saveVote(data: {
+  dni: string;
+  region: unknown;
+  recommended_party: unknown;
+  rejected_parties: unknown[];
+  saved_at: string;
+}): Promise<{ success: boolean }> {
+  return fetchApi<{ success: boolean }>('/mi-voto/save', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function lookupVote(dni: string): Promise<{
+  region: { id: string; name: string; seats: number };
+  recommended_party: { id: string; name: string; abbreviation: string; color?: string };
+  rejected_parties: { id: string; name: string; abbreviation: string; color?: string }[];
+  saved_at: string;
+}> {
+  return fetchApi('/mi-voto/lookup', {
+    method: 'POST',
+    body: JSON.stringify({ dni }),
+  });
+}

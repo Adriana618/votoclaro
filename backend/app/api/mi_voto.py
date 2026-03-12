@@ -1,4 +1,9 @@
-"""Mi Voto endpoints — save and retrieve strategic vote by DNI."""
+"""Mi Voto endpoints — save and retrieve strategic vote by DNI + dígito verificador.
+
+Peruvian DNIs have 8 digits plus a verification digit (1 character, letter or number).
+We require both for save/lookup to prevent unauthorized access to someone else's vote.
+The key is hashed as SHA-256(dni + digito) so it's unique per person.
+"""
 
 import hashlib
 import json
@@ -12,9 +17,21 @@ router = APIRouter(prefix="/mi-voto", tags=["mi-voto"])
 VOTES_FILE = Path(__file__).resolve().parent.parent.parent / "data" / "saved_votes.json"
 
 
-def _hash_dni(dni: str) -> str:
-    """Hash DNI with SHA-256 for privacy. Same DNI always produces same hash."""
-    return hashlib.sha256(dni.strip().encode("utf-8")).hexdigest()
+def _validate_dni_digito(dni: str, digito: str) -> None:
+    """Validate DNI (8 digits) and dígito verificador (1 alphanumeric char)."""
+    if not dni or len(dni) != 8 or not dni.isdigit():
+        raise HTTPException(status_code=400, detail="DNI debe tener 8 digitos.")
+    if not digito or len(digito) != 1 or not digito.isalnum():
+        raise HTTPException(
+            status_code=400,
+            detail="Digito verificador debe ser 1 caracter (numero o letra).",
+        )
+
+
+def _hash_key(dni: str, digito: str) -> str:
+    """Hash DNI + dígito verificador with SHA-256 for privacy."""
+    combined = f"{dni.strip()}-{digito.strip().upper()}"
+    return hashlib.sha256(combined.encode("utf-8")).hexdigest()
 
 
 def _load_votes() -> dict:
@@ -30,19 +47,19 @@ def _save_votes(votes: dict) -> None:
 
 @router.post("/save")
 async def save_vote(request: Request):
-    """Save a strategic vote result linked to a hashed DNI.
+    """Save a strategic vote result linked to hashed DNI + dígito verificador.
 
-    Body: {dni, region, recommended_party, rejected_parties}
+    Body: {dni, digito, region, recommended_party, rejected_parties}
     """
     body = await request.json()
     dni = body.get("dni", "")
-    if not dni or len(dni) != 8 or not dni.isdigit():
-        raise HTTPException(status_code=400, detail="DNI debe tener 8 digitos.")
+    digito = body.get("digito", "")
+    _validate_dni_digito(dni, digito)
 
-    dni_hash = _hash_dni(dni)
+    key = _hash_key(dni, digito)
 
     votes = _load_votes()
-    votes[dni_hash] = {
+    votes[key] = {
         "region": body.get("region"),
         "recommended_party": body.get("recommended_party"),
         "rejected_parties": body.get("rejected_parties"),
@@ -55,24 +72,24 @@ async def save_vote(request: Request):
 
 @router.post("/lookup")
 async def lookup_vote(request: Request):
-    """Look up a saved strategic vote by DNI.
+    """Look up a saved strategic vote by DNI + dígito verificador.
 
-    Body: {dni}
+    Body: {dni, digito}
     Returns the saved vote or 404.
     """
     body = await request.json()
     dni = body.get("dni", "")
-    if not dni or len(dni) != 8 or not dni.isdigit():
-        raise HTTPException(status_code=400, detail="DNI debe tener 8 digitos.")
+    digito = body.get("digito", "")
+    _validate_dni_digito(dni, digito)
 
-    dni_hash = _hash_dni(dni)
+    key = _hash_key(dni, digito)
     votes = _load_votes()
-    vote = votes.get(dni_hash)
+    vote = votes.get(key)
 
     if not vote:
         raise HTTPException(
             status_code=404,
-            detail="No se encontro un voto guardado con este DNI. Usa el simulador primero.",
+            detail="No se encontro un voto guardado con este DNI y digito verificador.",
         )
 
     return vote

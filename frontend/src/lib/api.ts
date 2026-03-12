@@ -97,6 +97,7 @@ export async function getTrends(regionId: string): Promise<TrendData[]> {
 
 export async function saveVote(data: {
   dni: string;
+  digito: string;
   region: unknown;
   recommended_party: unknown;
   rejected_parties: unknown[];
@@ -108,7 +109,7 @@ export async function saveVote(data: {
   });
 }
 
-export async function lookupVote(dni: string): Promise<{
+export async function lookupVote(dni: string, digito: string): Promise<{
   region: { id: string; name: string; seats: number };
   recommended_party: { id: string; name: string; abbreviation: string; color?: string };
   rejected_parties: { id: string; name: string; abbreviation: string; color?: string }[];
@@ -116,6 +117,6 @@ export async function lookupVote(dni: string): Promise<{
 }> {
   return fetchApi('/mi-voto/lookup', {
     method: 'POST',
-    body: JSON.stringify({ dni }),
+    body: JSON.stringify({ dni, digito }),
   });
 }

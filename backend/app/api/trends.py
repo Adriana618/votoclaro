@@ -16,11 +16,32 @@ async def trends_by_query(region_id: str = ""):
 
     Frontend expects TrendData[] (array) with fields:
     region_id, date, anti_vote_distribution, top_rejected.
-    Return empty array until we have real trend data from user simulations.
+    Returns polling-based trend data until we have enough organic user data.
     """
-    # Return empty array — frontend handles this gracefully
-    # (shows "No hay datos disponibles para esta region aun.")
-    return []
+    from app.data.parties import PARTIES
+    from app.data.polling_data import TOP_REJECTED_PARTIES, TREND_HISTORY
+
+    # Build top_rejected as Party objects
+    top_rejected = []
+    for abbr in TOP_REJECTED_PARTIES:
+        p = PARTIES.get(abbr, {})
+        top_rejected.append({
+            "id": abbr,
+            "name": p.get("name", abbr),
+            "abbreviation": p.get("abbreviation", abbr),
+            "color": p.get("color"),
+        })
+
+    # Return trend history with top_rejected attached
+    return [
+        {
+            "region_id": region_id or "nacional",
+            "date": entry["date"],
+            "anti_vote_distribution": entry["anti_vote_distribution"],
+            "top_rejected": top_rejected,
+        }
+        for entry in TREND_HISTORY
+    ]
 
 
 @router.get("/{region_slug}")

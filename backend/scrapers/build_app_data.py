@@ -25,6 +25,7 @@ from pathlib import Path
 DATA_DIR = Path(__file__).resolve().parent / "data"
 JNE_FILE = DATA_DIR / "jne_candidatos.json"
 CONGRESO_FILE = DATA_DIR / "congreso_votaciones.json"
+CONVOCA_FILE = DATA_DIR / "convoca_investigations.json"
 OUTPUT_JSON = DATA_DIR / "candidates_final.json"
 APP_CANDIDATES_PY = Path(__file__).resolve().parent.parent / "app" / "data" / "candidates.py"
 
@@ -293,6 +294,51 @@ def _apply_congress_data(candidate: dict, congress_data: dict):
         candidate["voted_pro_crime"] = True
 
 
+def load_convoca_investigations() -> dict[str, int]:
+    """Load Convoca investigation counts per candidate name."""
+    if not CONVOCA_FILE.exists():
+        print("⚠ No existe convoca_investigations.json — saltando investigaciones")
+        return {}
+
+    data = json.loads(CONVOCA_FILE.read_text(encoding="utf-8"))
+    result = {}
+    for name, info in data.items():
+        count = info.get("article_count", 0)
+        if count > 0:
+            result[name] = count
+
+    print(f"📥 Cargando investigaciones de Convoca: {len(result)} candidatos con artículos")
+    return result
+
+
+def merge_convoca(candidates: list[dict], convoca: dict[str, int]) -> int:
+    """Merge Convoca investigation counts into candidates."""
+    if not convoca:
+        return 0
+
+    merged = 0
+    convoca_normalized = {normalize_name(k): v for k, v in convoca.items()}
+
+    for candidate in candidates:
+        cand_norm = normalize_name(candidate["name"])
+
+        # Exact match
+        if cand_norm in convoca_normalized:
+            candidate["investigations"] = min(convoca_normalized[cand_norm], 3)
+            merged += 1
+            continue
+
+        # Fuzzy match
+        for norm_name, count in convoca_normalized.items():
+            if fuzzy_match(cand_norm, norm_name) >= 0.85:
+                candidate["investigations"] = min(count, 3)
+                merged += 1
+                break
+
+    print(f"  ✓ {merged} candidatos con investigaciones de Convoca")
+    return merged
+
+
 def calculate_controversy_scores(candidates: list[dict]):
     """Calculate controversy scores for all candidates."""
     for c in candidates:
@@ -454,7 +500,11 @@ def main():
         congress_votes = load_congreso_votes()
         merge_stats = cross_reference(candidates, congress_votes)
 
-    # Step 3: Calculate controversy scores
+    # Step 3: Merge Convoca investigations
+    convoca = load_convoca_investigations()
+    convoca_merged = merge_convoca(candidates, convoca)
+
+    # Step 4: Calculate controversy scores
     calculate_controversy_scores(candidates)
 
     # Print stats

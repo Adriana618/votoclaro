@@ -29,14 +29,18 @@ export default function SimuladorPage() {
       .catch(() => {
         // Use placeholder data if API is not available
         setParties([
-          { id: '1', name: 'Fuerza Popular', abbreviation: 'FP', color: '#FF6600' },
-          { id: '2', name: 'Perú Libre', abbreviation: 'PL', color: '#CC0000' },
-          { id: '3', name: 'Acción Popular', abbreviation: 'AP', color: '#E31937' },
-          { id: '4', name: 'Alianza para el Progreso', abbreviation: 'APP', color: '#00529B' },
-          { id: '5', name: 'Renovación Popular', abbreviation: 'RP', color: '#0033A0' },
-          { id: '6', name: 'Avanza País', abbreviation: 'AVP', color: '#FF0000' },
-          { id: '7', name: 'Podemos Perú', abbreviation: 'PP', color: '#6F2DA8' },
-          { id: '8', name: 'Juntos por el Perú', abbreviation: 'JP', color: '#DC143C' },
+          { id: 'fp', name: 'Fuerza Popular', abbreviation: 'fp', color: '#FF6B00' },
+          { id: 'rp', name: 'Renovación Popular', abbreviation: 'rp', color: '#1B3A6B' },
+          { id: 'app', name: 'Alianza Para el Progreso', abbreviation: 'app', color: '#00529B' },
+          { id: 'ap', name: 'Acción Popular', abbreviation: 'ap', color: '#E31937' },
+          { id: 'pl', name: 'Perú Libre', abbreviation: 'pl', color: '#CC0000' },
+          { id: 'pm', name: 'Partido Morado', abbreviation: 'pm', color: '#7B2D8E' },
+          { id: 'jpp', name: 'Juntos por el Perú', abbreviation: 'jpp', color: '#DC143C' },
+          { id: 'pod', name: 'Podemos Perú', abbreviation: 'pod', color: '#6F2DA8' },
+          { id: 'avp', name: 'Avanza País', abbreviation: 'avp', color: '#FF0000' },
+          { id: 'sc', name: 'Somos Perú', abbreviation: 'sc', color: '#FF6B00' },
+          { id: 'an', name: 'Alianza Nacional', abbreviation: 'an', color: '#003366' },
+          { id: 'fep', name: 'Frente Esperanza', abbreviation: 'fep', color: '#FFD700' },
         ]);
       });
   }, []);

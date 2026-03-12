@@ -11,9 +11,17 @@ router = APIRouter(prefix="/trends", tags=["trends"])
 
 
 @router.get("")
-async def trends_by_query(region_id: str = "", db: Session = Depends(get_db)):
+async def trends_by_query(region_id: str = ""):
     """Frontend calls GET /trends?region_id=X."""
-    return await region_trends(region_id, db)
+    # Return empty trends (DB-dependent feature not yet active)
+    return {
+        "region": region_id,
+        "region_slug": region_id,
+        "total_simulations": 0,
+        "most_rejected": [],
+        "most_recommended": [],
+        "message": "Aun no hay suficientes datos para esta region.",
+    }
 
 
 @router.get("/{region_slug}")

@@ -8,9 +8,11 @@ import { Menu, X } from 'lucide-react';
 const links = [
   { href: '/simulador', label: 'Simulador' },
   { href: '/quiz', label: 'Quiz' },
+  { href: '/mi-voto', label: 'Mi Voto' },
   { href: '/filtros', label: 'Filtros' },
-  { href: '/sabias-que', label: 'Datos' },
   { href: '/controversial', label: 'Ranking' },
+  { href: '/tendencias', label: 'Tendencias' },
+  { href: '/sabias-que', label: 'Datos' },
   { href: '/aprende', label: 'Aprende' },
 ];
 

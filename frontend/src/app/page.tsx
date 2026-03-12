@@ -148,6 +148,18 @@ export default function HomePage() {
             Aprende a votar
           </Link>
           <Link
+            href="/tendencias"
+            className="px-5 py-2.5 rounded-full border border-gray-700 text-gray-300 hover:border-[#D4AF37] hover:text-[#D4AF37] transition-colors text-sm"
+          >
+            Tendencias colectivas
+          </Link>
+          <Link
+            href="/mi-voto"
+            className="px-5 py-2.5 rounded-full border border-gray-700 text-gray-300 hover:border-[#D4AF37] hover:text-[#D4AF37] transition-colors text-sm"
+          >
+            Consultar mi voto
+          </Link>
+          <Link
             href="/registrar"
             className="px-5 py-2.5 rounded-full border border-gray-700 text-gray-300 hover:border-[#D4AF37] hover:text-[#D4AF37] transition-colors text-sm"
           >

@@ -94,11 +94,16 @@ export interface ShareableFact {
   share_text: string;
 }
 
+export interface TopVotedParty extends Party {
+  percentage: number;
+}
+
 export interface TrendData {
   region_id: string;
   date: string;
   anti_vote_distribution: Record<string, number>;
   top_rejected: Party[];
+  top_voted?: TopVotedParty[];
 }
 
 export interface RegistrationData {

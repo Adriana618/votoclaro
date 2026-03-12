@@ -94,26 +94,55 @@ export default function TendenciasPage() {
             </ResponsiveContainer>
           </motion.div>
 
-          {/* Top rejected */}
-          {latestTrend.top_rejected && latestTrend.top_rejected.length > 0 && (
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-              <h2 className="text-lg font-bold mb-4">Partidos más rechazados</h2>
-              <div className="space-y-3">
-                {latestTrend.top_rejected.map((party, i) => (
-                  <div key={party.id} className="flex items-center gap-3">
-                    <span className="text-lg font-bold text-gray-600 w-6">#{i + 1}</span>
-                    <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
-                      style={{ backgroundColor: party.color || COLORS[i] }}
-                    >
-                      {party.abbreviation?.slice(0, 2)}
+          {/* Top voted + Top rejected side by side */}
+          <div className="grid sm:grid-cols-2 gap-4">
+            {/* Top voted */}
+            {latestTrend.top_voted && latestTrend.top_voted.length > 0 && (
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                <h2 className="text-lg font-bold mb-4 text-green-400">Partidos más votados</h2>
+                <p className="text-xs text-gray-500 mb-3">Intención de voto según encuestas</p>
+                <div className="space-y-3">
+                  {latestTrend.top_voted.map((party, i) => (
+                    <div key={party.id} className="flex items-center gap-3">
+                      <span className="text-lg font-bold text-gray-600 w-6">#{i + 1}</span>
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white"
+                        style={{ backgroundColor: party.color || COLORS[i] }}
+                      >
+                        {party.abbreviation?.slice(0, 2).toUpperCase()}
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-white font-medium">{party.name}</span>
+                      </div>
+                      <span className="text-green-400 font-bold text-sm">{party.percentage}%</span>
                     </div>
-                    <span className="text-white font-medium">{party.name}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+            {/* Top rejected */}
+            {latestTrend.top_rejected && latestTrend.top_rejected.length > 0 && (
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                <h2 className="text-lg font-bold mb-4 text-red-400">Partidos más rechazados</h2>
+                <p className="text-xs text-gray-500 mb-3">Anti-voto según encuestas</p>
+                <div className="space-y-3">
+                  {latestTrend.top_rejected.map((party, i) => (
+                    <div key={party.id} className="flex items-center gap-3">
+                      <span className="text-lg font-bold text-gray-600 w-6">#{i + 1}</span>
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white"
+                        style={{ backgroundColor: party.color || COLORS[i] }}
+                      >
+                        {party.abbreviation?.slice(0, 2).toUpperCase()}
+                      </div>
+                      <span className="text-white font-medium">{party.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Trend over time */}
           {lineData.length > 1 && (

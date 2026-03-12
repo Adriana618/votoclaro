@@ -61,6 +61,43 @@ def get_top_rejected(region_slug: str) -> list[str]:
     return ["fp", "rp", "pl", "app", "pod"]
 
 
+def get_top_voted(region_slug: str) -> list[tuple[str, float]]:
+    """Return top voted parties (abbr, percentage) for a region.
+
+    Reflects regional voting intention from polls.
+    """
+    if region_slug in SOUTH_REGIONS:
+        return [
+            ("pl", 18.5), ("jpp", 14.2), ("ap", 12.0),
+            ("pm", 10.5), ("an", 8.3),
+        ]
+    elif region_slug in NORTH_REGIONS:
+        return [
+            ("app", 18.0), ("fp", 16.5), ("ap", 12.8),
+            ("rp", 11.0), ("sc", 6.5),
+        ]
+    elif region_slug in LIMA_REGIONS:
+        return [
+            ("fp", 14.5), ("rp", 12.8), ("app", 10.2),
+            ("ap", 8.5), ("pm", 7.1),
+        ]
+    elif region_slug in CENTRAL_REGIONS:
+        return [
+            ("pl", 15.0), ("ap", 13.5), ("fp", 12.0),
+            ("app", 10.0), ("jpp", 8.5),
+        ]
+    elif region_slug in EAST_REGIONS:
+        return [
+            ("ap", 16.0), ("app", 14.5), ("sc", 10.0),
+            ("pl", 9.5), ("fp", 9.0),
+        ]
+    # Default
+    return [
+        ("fp", 14.5), ("rp", 12.8), ("app", 10.2),
+        ("ap", 8.5), ("pm", 7.1),
+    ]
+
+
 # --- Regional trend generators (using full party names for display) ---
 
 def _south_trends() -> list[dict]:

@@ -19,28 +19,34 @@ async def trends_by_query(region_id: str = ""):
     Returns polling-based trend data until we have enough organic user data.
     """
     from app.data.parties import PARTIES
-    from app.data.polling_data import get_regional_trends, get_top_rejected
+    from app.data.polling_data import get_regional_trends, get_top_rejected, get_top_voted
 
     slug = region_id or "lima"
 
-    # Build top_rejected as Party objects for this region
-    top_rejected = []
-    for abbr in get_top_rejected(slug):
+    def _party_obj(abbr: str) -> dict:
         p = PARTIES.get(abbr, {})
-        top_rejected.append({
+        return {
             "id": abbr,
             "name": p.get("name", abbr),
             "abbreviation": p.get("abbreviation", abbr),
             "color": p.get("color"),
-        })
+        }
 
-    # Return regional trend history with top_rejected attached
+    # Build top_rejected and top_voted as Party objects
+    top_rejected = [_party_obj(abbr) for abbr in get_top_rejected(slug)]
+    top_voted = [
+        {**_party_obj(abbr), "percentage": pct}
+        for abbr, pct in get_top_voted(slug)
+    ]
+
+    # Return regional trend history
     return [
         {
             "region_id": slug,
             "date": entry["date"],
             "anti_vote_distribution": entry["anti_vote_distribution"],
             "top_rejected": top_rejected,
+            "top_voted": top_voted,
         }
         for entry in get_regional_trends(slug)
     ]

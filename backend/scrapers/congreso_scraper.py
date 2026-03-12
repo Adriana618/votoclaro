@@ -204,27 +204,47 @@ def get_expediente(pley_num: int) -> dict | None:
         return None
 
 
+def _archivo_url(archivo_id: int) -> str:
+    """Build a PDF download URL from a proyectoArchivoId."""
+    b64 = base64.b64encode(str(archivo_id).encode()).decode()
+    return f"{API_BASE}/archivo/{b64}/pdf"
+
+
 def extract_voting_pdfs(expediente: dict) -> list[dict]:
     """Extract voting PDF URLs from expediente seguimiento."""
     pdfs = []
-    seen_urls = set()
+    seen_keys = set()
 
     for seg in expediente.get("seguimientos", []):
         detalle = seg.get("detalle", "").upper()
-        # Only get VOTACIÓN entries (not just ASISTENCIA)
-        if "VOTACI" not in detalle:
+        # Get entries with VOTACIÓN or ASISTENCIA Y VOTACIÓN
+        if "VOTACI" not in detalle and "ASISTENCIA" not in detalle:
             continue
 
-        for archivo in seg.get("archivos", []):
+        archivos = seg.get("archivos") or []
+        for archivo in archivos:
+            # Use enlace if available, otherwise build URL from archivo ID
             url = archivo.get("enlace")
-            if not url or url in seen_urls:
+            archivo_id = archivo.get("proyectoArchivoId")
+
+            if not url and archivo_id:
+                url = _archivo_url(archivo_id)
+
+            if not url:
                 continue
-            seen_urls.add(url)
+
+            # Deduplicate by URL or archivo ID
+            key = url or str(archivo_id)
+            if key in seen_keys:
+                continue
+            seen_keys.add(key)
+
             pdfs.append({
                 "url": url,
                 "fecha": seg.get("fecha", ""),
                 "detalle": seg.get("detalle", ""),
                 "descripcion": archivo.get("descripcion", ""),
+                "archivo_id": archivo_id,
             })
 
     return pdfs

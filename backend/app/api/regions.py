@@ -3,23 +3,22 @@
 from fastapi import APIRouter
 
 from app.data.regions import REGIONS, SENATE_SEATS
-from app.schemas.region import RegionOut
 
 router = APIRouter(prefix="/regions", tags=["regions"])
 
 
-@router.get("", response_model=list[RegionOut])
+@router.get("")
 async def list_regions():
     """Return all electoral regions with their seat counts."""
     return [
-        RegionOut(
-            id=idx,
-            name=r["name"],
-            slug=r["slug"],
-            seats_diputados=r["seats_diputados"],
-            department_code=r.get("department_code"),
-        )
-        for idx, r in enumerate(REGIONS, start=1)
+        {
+            "id": r["slug"],
+            "name": r["name"],
+            "slug": r["slug"],
+            "seats": r["seats_diputados"],
+            "seats_diputados": r["seats_diputados"],
+        }
+        for r in REGIONS
     ]
 
 

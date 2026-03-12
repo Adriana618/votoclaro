@@ -44,9 +44,14 @@ async def submit_quiz(submission: QuizSubmission):
 
     top = affinities[0]
 
-    return QuizResult(
-        affinities=[PartyAffinity(**a) for a in affinities],
-        top_match=top["party"],
-        top_match_name=top["name"],
-        top_match_percentage=top["match_percentage"],
-    )
+    affinity_list = [PartyAffinity(**a) for a in affinities]
+
+    return {
+        # Frontend expects 'rankings'
+        "rankings": [a.model_dump() for a in affinity_list],
+        # Also include original fields for backwards compat
+        "affinities": [a.model_dump() for a in affinity_list],
+        "top_match": top["party"],
+        "top_match_name": top["name"],
+        "top_match_percentage": top["match_percentage"],
+    }

@@ -14,8 +14,7 @@ def _build_controversy_reason(c: dict) -> str:
     if c.get("has_criminal_record"):
         reasons.append("antecedentes penales")
     if c.get("voted_pro_crime"):
-        count = c.get("pro_crime_vote_count", 0)
-        reasons.append(f"votó a favor de {count} leyes pro-crimen")
+        reasons.append("votó a favor de leyes pro-crimen en el Congreso")
     if c.get("investigations", 0) > 0:
         reasons.append(f"{c['investigations']} investigación(es) en medios")
     if c.get("is_reelection"):

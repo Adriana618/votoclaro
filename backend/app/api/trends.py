@@ -10,6 +10,12 @@ from app.models.vote_preference import VotePreference
 router = APIRouter(prefix="/trends", tags=["trends"])
 
 
+@router.get("")
+async def trends_by_query(region_id: str = "", db: Session = Depends(get_db)):
+    """Frontend calls GET /trends?region_id=X."""
+    return await region_trends(region_id, db)
+
+
 @router.get("/{region_slug}")
 async def region_trends(region_slug: str, db: Session = Depends(get_db)):
     """Return aggregated trend data for a region.

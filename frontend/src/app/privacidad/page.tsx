@@ -159,8 +159,8 @@ export default function PrivacidadPage() {
           <p>
             Para consultas sobre privacidad, ejercer tus derechos o reportar incidentes
             de seguridad, escribenos a{' '}
-            <a href="mailto:privacidad@votoclaro.pe" className="text-[#D4AF37] hover:underline">
-              privacidad@votoclaro.pe
+            <a href="mailto:privacidad@votaclaro.com" className="text-[#D4AF37] hover:underline">
+              privacidad@votaclaro.com
             </a>
           </p>
         </section>

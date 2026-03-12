@@ -145,7 +145,7 @@ def generate_anti_vote_image(
 
     # Bottom tagline
     font_bottom = _load_font(26)
-    tagline = "Simula tu voto en votoclaro.pe"
+    tagline = "Simula tu voto en votaclaro.com"
     bbox_tag = draw.textbbox((0, 0), tagline, font=font_bottom)
     tag_w = bbox_tag[2] - bbox_tag[0]
     draw.text(
@@ -202,7 +202,7 @@ def generate_quiz_image(
 
     # Bottom CTA
     font_bottom = _load_font(26)
-    cta = "\u00bfCon qui\u00e9n coincides t\u00fa? \u2192 votoclaro.pe/quiz"
+    cta = "\u00bfCon qui\u00e9n coincides t\u00fa? \u2192 votaclaro.com/quiz"
     bbox_cta = draw.textbbox((0, 0), cta, font=font_bottom)
     cta_w = bbox_cta[2] - bbox_cta[0]
     draw.text(

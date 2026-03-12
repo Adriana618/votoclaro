@@ -99,7 +99,7 @@ export default function CifraRepartidoraPage() {
             '📊 *¿Sabes cómo funciona la cifra repartidora?*\n\n' +
             'Es el método que decide quién llega al Congreso. Si no lo entiendes, ' +
             'tu voto puede terminar ayudando a quien no quieres.\n\n' +
-            'Aprende en 👉 votoclaro.pe/aprende/cifra-repartidora\n\n' +
+            'Aprende en 👉 votaclaro.com/aprende/cifra-repartidora\n\n' +
             '_Que la ignorancia no gane las elecciones 🇵🇪_'
           }
           label="Compartir explicación"

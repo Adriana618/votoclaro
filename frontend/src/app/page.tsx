@@ -91,7 +91,7 @@ export default function HomePage() {
             message={
               '🗳️ *VotoClaro* - Herramienta de voto estratégico para las elecciones Perú 2026.\n\n' +
               'Simula tu voto, descubre con quién coincides y comparte los datos que importan.\n\n' +
-              '👉 votoclaro.pe\n\n' +
+              '👉 votaclaro.com\n\n' +
               '_Que la ignorancia no gane las elecciones 🇵🇪_'
             }
             label="Comparte VotoClaro"

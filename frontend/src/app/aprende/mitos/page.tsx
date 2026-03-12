@@ -98,7 +98,7 @@ export default function MitosPage() {
             '❌ "Viciar mi voto es protesta" → FALSO. Solo beneficia al partido más grande.\n' +
             '❌ "Voto en blanco anula elecciones" → FALSO.\n' +
             '❌ "Todos son iguales" → FALSO. Compáralos.\n\n' +
-            'Más mitos en 👉 votoclaro.pe/aprende/mitos\n\n' +
+            'Más mitos en 👉 votaclaro.com/aprende/mitos\n\n' +
             '_Que la ignorancia no gane las elecciones 🇵🇪_'
           }
           label="Compartir mitos"

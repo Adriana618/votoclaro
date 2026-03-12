@@ -94,7 +94,7 @@ export default function ControversialPage() {
                 candidates.slice(0, 5).map((c, i) =>
                   `${i + 1}. ${c.name} (${c.party?.name || '?'}) - ${c.controversy_score}/100`
                 ).join('\n') +
-                `\n\nVe el ranking completo en 👉 votoclaro.pe/controversial\n\n` +
+                `\n\nVe el ranking completo en 👉 votaclaro.com/controversial\n\n` +
                 `_Que la ignorancia no gane las elecciones 🇵🇪_`
               }
               label="Compartir ranking"

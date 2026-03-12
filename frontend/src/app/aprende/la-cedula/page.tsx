@@ -117,7 +117,7 @@ export default function LaCedulaPage() {
             '🗳️ *¿Sabes qué son las 5 columnas de la cédula?*\n\n' +
             'Puedes votar por partidos DIFERENTES en cada columna. ' +
             'Aprende a usar tu voto estratégicamente.\n\n' +
-            '👉 votoclaro.pe/aprende/la-cedula\n\n' +
+            '👉 votaclaro.com/aprende/la-cedula\n\n' +
             '_Que la ignorancia no gane las elecciones 🇵🇪_'
           }
           label="Compartir guía"

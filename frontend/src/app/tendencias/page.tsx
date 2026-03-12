@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import RegionSelector from '@/components/RegionSelector';
+import PartyLogo from '@/components/PartyLogo';
 import { getTrends } from '@/lib/api';
 import type { TrendData } from '@/lib/types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
@@ -106,12 +107,12 @@ export default function TendenciasPage() {
                     <div key={party.id}>
                       <div className="flex items-center gap-3">
                         <span className="text-lg font-bold text-gray-600 w-6">#{i + 1}</span>
-                        <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
-                          style={{ backgroundColor: party.color || COLORS[i] }}
-                        >
-                          {party.abbreviation?.slice(0, 2).toUpperCase()}
-                        </div>
+                        <PartyLogo
+                          abbreviation={party.abbreviation || party.id}
+                          name={party.name}
+                          color={party.color}
+                          size={32}
+                        />
                         <div className="flex-1 min-w-0">
                           <span className="text-white font-medium">{party.name}</span>
                         </div>
@@ -147,12 +148,12 @@ export default function TendenciasPage() {
                     <div key={party.id}>
                       <div className="flex items-center gap-3">
                         <span className="text-lg font-bold text-gray-600 w-6">#{i + 1}</span>
-                        <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
-                          style={{ backgroundColor: party.color || COLORS[i] }}
-                        >
-                          {party.abbreviation?.slice(0, 2).toUpperCase()}
-                        </div>
+                        <PartyLogo
+                          abbreviation={party.abbreviation || party.id}
+                          name={party.name}
+                          color={party.color}
+                          size={32}
+                        />
                         <div className="flex-1 min-w-0">
                           <span className="text-white font-medium">{party.name}</span>
                         </div>

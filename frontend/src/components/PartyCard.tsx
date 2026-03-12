@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import type { Party } from '@/lib/types';
+import PartyLogo from './PartyLogo';
 
 interface PartyCardProps {
   party: Party;
@@ -39,19 +40,15 @@ export default function PartyCard({
       }}
     >
       <div className="flex items-center gap-3">
-        {/* Logo placeholder */}
-        <div
-          className="w-12 h-12 rounded-lg flex items-center justify-center text-lg font-bold shrink-0"
-          style={{ backgroundColor: party.color || '#374151' }}
-        >
-          {party.abbreviation?.slice(0, 2) || party.name.slice(0, 2)}
-        </div>
+        <PartyLogo
+          abbreviation={party.abbreviation || party.id}
+          name={party.name}
+          color={party.color}
+          size={48}
+        />
 
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-white truncate">{party.name}</h3>
-          {party.abbreviation && (
-            <p className="text-sm text-gray-400">{party.abbreviation}</p>
-          )}
         </div>
 
         {selected && (

@@ -7,6 +7,7 @@ import type { SpicyFilter, Candidate } from '@/lib/types';
 
 const CATEGORIES = [
   { id: 'seguridad', label: 'Seguridad', emoji: '🛡️' },
+  { id: 'corrupcion', label: 'Corrupción', emoji: '🚨' },
   { id: 'economia', label: 'Economía', emoji: '💰' },
   { id: 'social', label: 'Temas Sociales', emoji: '🤝' },
   { id: 'politica', label: 'Política', emoji: '🏛️' },

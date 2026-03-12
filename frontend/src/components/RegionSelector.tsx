@@ -29,7 +29,7 @@ const PERU_REGIONS = [
   { id: 'tacna', name: 'Tacna' },
   { id: 'tumbes', name: 'Tumbes' },
   { id: 'ucayali', name: 'Ucayali' },
-  { id: 'peruanos-en-el-extranjero', name: 'Peruanos en el Extranjero' },
+  { id: 'extranjero', name: 'Peruanos en el Extranjero' },
 ];
 
 interface RegionSelectorProps {

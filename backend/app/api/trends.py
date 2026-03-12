@@ -12,16 +12,15 @@ router = APIRouter(prefix="/trends", tags=["trends"])
 
 @router.get("")
 async def trends_by_query(region_id: str = ""):
-    """Frontend calls GET /trends?region_id=X."""
-    # Return empty trends (DB-dependent feature not yet active)
-    return {
-        "region": region_id,
-        "region_slug": region_id,
-        "total_simulations": 0,
-        "most_rejected": [],
-        "most_recommended": [],
-        "message": "Aun no hay suficientes datos para esta region.",
-    }
+    """Frontend calls GET /trends?region_id=X.
+
+    Frontend expects TrendData[] (array) with fields:
+    region_id, date, anti_vote_distribution, top_rejected.
+    Return empty array until we have real trend data from user simulations.
+    """
+    # Return empty array — frontend handles this gracefully
+    # (shows "No hay datos disponibles para esta region aun.")
+    return []
 
 
 @router.get("/{region_slug}")

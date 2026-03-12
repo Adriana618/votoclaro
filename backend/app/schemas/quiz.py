@@ -34,6 +34,7 @@ class PartyAffinity(BaseModel):
 
 
 class QuizResult(BaseModel):
+    rankings: list[PartyAffinity]
     affinities: list[PartyAffinity]
     top_match: str
     top_match_name: str

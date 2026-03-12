@@ -26,8 +26,22 @@ def _build_controversy_reason(c: dict) -> str:
 
 def _serialize_candidate(c: dict) -> dict:
     """Serialize a candidate to the format expected by the frontend."""
+    from app.data.regions import REGIONS
+
     party_slug = c.get("party_slug", "")
     party_data = PARTIES.get(party_slug, {})
+    region_slug = c.get("region_slug") or ""
+
+    # Build region object
+    region_obj = None
+    for r in REGIONS:
+        if r["slug"] == region_slug:
+            region_obj = {
+                "id": region_slug,
+                "name": r["name"],
+                "seats": r["seats_diputados"],
+            }
+            break
 
     return {
         "id": str(c["id"]),
@@ -40,7 +54,8 @@ def _serialize_candidate(c: dict) -> dict:
             "abbreviation": party_data.get("abbreviation", party_slug.upper()),
             "color": party_data.get("color"),
         } if party_slug else None,
-        "region_id": c.get("region_slug") or "",
+        "region_id": region_slug,
+        "region": region_obj,
         "position": c.get("position_number") or 0,
         "has_criminal_record": c.get("has_criminal_record", False),
         "controversy_score": c["controversy_score"],
@@ -66,22 +81,41 @@ async def controversial_ranking(
     region: str | None = None,
     region_id: str | None = None,
     party: str | None = None,
+    filters: str | None = None,
 ):
     """Return candidates ranked by controversy score (descending).
 
     Returns a flat array of candidates compatible with the frontend.
+    Accepts optional filters param (comma-separated filter IDs from spicy_filters).
     """
     region_slug = region or region_id
 
     candidates = list(CANDIDATES.values())
 
-    # Filter
+    # Filter by region
     if region_slug:
         r_ids = set(CANDIDATES_BY_REGION.get(region_slug, []))
         candidates = [c for c in candidates if c["id"] in r_ids]
     if party:
         p_ids = set(CANDIDATES_BY_PARTY.get(party, []))
         candidates = [c for c in candidates if c["id"] in p_ids]
+
+    # Apply spicy filters
+    if filters:
+        from app.data.spicy_filters import SPICY_FILTERS
+
+        filter_ids = set(f.strip() for f in filters.split(","))
+        # Build a set of data_field names from the active candidate filters
+        active_fields = set()
+        for sf in SPICY_FILTERS:
+            if sf["id"] in filter_ids and sf.get("type") == "candidates" and sf.get("data_field"):
+                active_fields.add(sf["data_field"])
+
+        if active_fields:
+            candidates = [
+                c for c in candidates
+                if any(c.get(field) for field in active_fields)
+            ]
 
     # Only include those with controversy_score > 0
     candidates = [c for c in candidates if c.get("controversy_score", 0) > 0]

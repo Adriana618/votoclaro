@@ -57,8 +57,24 @@ async def compat_register(request: Request):
 
 @api_router.post("/simulador/calculate")
 async def compat_simulador(request: Request):
-    """Frontend calls POST /simulador/calculate, backend has POST /simulator/anti-vote."""
-    from app.services.anti_vote import compute_anti_vote_strategy
+    """Frontend calls POST /simulador/calculate, backend has POST /simulator/anti-vote.
+
+    Transforms backend response to match frontend AntiVoteResult interface:
+    - region: Region object {id, name, seats}
+    - rejected_parties: Party[] objects
+    - recommended_party: Party object
+    - dhondt_table: DhondtRow[] with quotients/divisors
+    - wasted_vote_risk: number
+    """
+    from app.data.parties import PARTIES
+    from app.data.regions import REGIONS
+    from app.services.anti_vote import (
+        DEFAULT_POLL_PERCENTAGES,
+        compute_anti_vote_strategy,
+        get_region_by_slug,
+        percentages_to_votes,
+    )
+    from app.services.dhondt import dhondt_method
 
     body = await request.json()
     region_slug = body.get("region_id", "")
@@ -72,4 +88,67 @@ async def compat_simulador(request: Request):
     except ValueError as e:
         return JSONResponse(status_code=404, content={"detail": str(e)})
 
-    return result
+    # Build region object
+    region_data = get_region_by_slug(region_slug)
+    region_obj = {
+        "id": region_slug,
+        "name": region_data["name"] if region_data else region_slug,
+        "seats": region_data["seats_diputados"] if region_data else 0,
+    }
+
+    # Build Party objects for rejected parties
+    def _party_obj(abbr: str) -> dict:
+        p = PARTIES.get(abbr, {})
+        return {
+            "id": abbr,
+            "name": p.get("name", abbr),
+            "abbreviation": p.get("abbreviation", abbr),
+            "color": p.get("color"),
+            "logo_url": p.get("logo_url"),
+        }
+
+    rejected_party_objs = [_party_obj(pid) for pid in rejected]
+
+    rec_abbr = result.get("recommended_party", "")
+    rec_party_obj = _party_obj(rec_abbr) if rec_abbr else {
+        "id": "", "name": "Ninguno", "abbreviation": "", "color": None, "logo_url": None,
+    }
+
+    # Build D'Hondt table with quotients and divisors
+    seats = region_obj["seats"]
+    votes = percentages_to_votes(DEFAULT_POLL_PERCENTAGES)
+    for rp in rejected:
+        if rp not in votes:
+            votes[rp] = 0
+
+    dhondt_table = []
+    allocation = dhondt_method(votes, seats)
+    for party_abbr, vote_count in sorted(votes.items(), key=lambda x: -x[1]):
+        if vote_count <= 0:
+            continue
+        divisors = list(range(1, seats + 1))
+        quotients = [vote_count / d for d in divisors]
+        dhondt_table.append({
+            "party": PARTIES.get(party_abbr, {}).get("name", party_abbr),
+            "votes": vote_count,
+            "divisors": divisors,
+            "quotients": quotients,
+            "seats_won": allocation.get(party_abbr, 0),
+        })
+
+    # Wasted vote risk: if recommended party has very low votes, risk is higher
+    rec_votes = votes.get(rec_abbr, 0)
+    total_votes = sum(votes.values()) or 1
+    rec_pct = (rec_votes / total_votes) * 100
+    # Simple heuristic: risk is inverse of party strength, capped 0-100
+    wasted_vote_risk = max(0, min(100, round(100 - rec_pct * 10)))
+
+    return {
+        "region": region_obj,
+        "rejected_parties": rejected_party_objs,
+        "recommended_party": rec_party_obj,
+        "recommended_party_label": f"Vota por {rec_party_obj['name']}",
+        "explanation": result.get("explanation", ""),
+        "dhondt_table": dhondt_table,
+        "wasted_vote_risk": wasted_vote_risk,
+    }

@@ -16,14 +16,14 @@ DEFAULT_POLL_PERCENTAGES: dict[str, float] = {
     "fp": 15.0,
     "pm": 5.0,
     "jpp": 4.0,
-    "ap": 8.0,
-    "sc": 3.0,
+    "sc": 5.0,
     "pl": 6.0,
     "an": 3.0,
     "app": 10.0,
     "pod": 4.0,
     "fep": 2.0,
     "avp": 5.0,
+    "cp": 4.0,
 }
 
 # Total simulated electorate per region (rough proportional estimates)

@@ -21,7 +21,7 @@ SPICY_FILTERS: list[dict] = [
         "category": "seguridad",
         "description": "Partidos que proponen estado de emergencia y militarización",
         "type": "parties",
-        "parties": ["rp", "fp", "ap"],
+        "parties": ["rp", "fp"],
     },
     # --- CORRUPCIÓN ---
     {
@@ -82,7 +82,7 @@ SPICY_FILTERS: list[dict] = [
         "category": "economia",
         "description": "Partidos que proponen privatizar Petroperú total o parcialmente",
         "type": "parties",
-        "parties": ["ap", "sc"],
+        "parties": ["avp", "sc"],
     },
     {
         "id": "defender_petroperu",

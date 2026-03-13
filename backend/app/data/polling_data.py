@@ -68,33 +68,33 @@ def get_top_voted(region_slug: str) -> list[tuple[str, float]]:
     """
     if region_slug in SOUTH_REGIONS:
         return [
-            ("pl", 18.5), ("jpp", 14.2), ("ap", 12.0),
+            ("pl", 18.5), ("jpp", 14.2), ("cp", 12.0),
             ("pm", 10.5), ("an", 8.3),
         ]
     elif region_slug in NORTH_REGIONS:
         return [
-            ("app", 18.0), ("fp", 16.5), ("ap", 12.8),
-            ("rp", 11.0), ("sc", 6.5),
+            ("app", 18.0), ("fp", 16.5), ("sc", 12.8),
+            ("rp", 11.0), ("fyl", 6.5),
         ]
     elif region_slug in LIMA_REGIONS:
         return [
             ("fp", 14.5), ("rp", 12.8), ("app", 10.2),
-            ("ap", 8.5), ("pm", 7.1),
+            ("sc", 8.5), ("pm", 7.1),
         ]
     elif region_slug in CENTRAL_REGIONS:
         return [
-            ("pl", 15.0), ("ap", 13.5), ("fp", 12.0),
+            ("pl", 15.0), ("cp", 13.5), ("fp", 12.0),
             ("app", 10.0), ("jpp", 8.5),
         ]
     elif region_slug in EAST_REGIONS:
         return [
-            ("ap", 16.0), ("app", 14.5), ("sc", 10.0),
+            ("sc", 16.0), ("app", 14.5), ("cp", 10.0),
             ("pl", 9.5), ("fp", 9.0),
         ]
     # Default
     return [
         ("fp", 14.5), ("rp", 12.8), ("app", 10.2),
-        ("ap", 8.5), ("pm", 7.1),
+        ("sc", 8.5), ("pm", 7.1),
     ]
 
 
@@ -161,7 +161,7 @@ def _north_trends() -> list[dict]:
             "date": "2026-02-01",
             "anti_vote_distribution": {
                 "Peru Libre": 30, "Juntos por el Peru": 20,
-                "Alianza Nacional": 12, "Podemos Peru": 10,
+                "Ahora Nacion": 12, "Podemos Peru": 10,
                 "Fuerza Popular": 10, "Otros": 18,
             },
         },
@@ -169,7 +169,7 @@ def _north_trends() -> list[dict]:
             "date": "2026-02-08",
             "anti_vote_distribution": {
                 "Peru Libre": 31, "Juntos por el Peru": 19,
-                "Alianza Nacional": 13, "Podemos Peru": 10,
+                "Ahora Nacion": 13, "Podemos Peru": 10,
                 "Fuerza Popular": 9, "Otros": 18,
             },
         },
@@ -177,7 +177,7 @@ def _north_trends() -> list[dict]:
             "date": "2026-02-15",
             "anti_vote_distribution": {
                 "Peru Libre": 29, "Juntos por el Peru": 21,
-                "Alianza Nacional": 12, "Podemos Peru": 11,
+                "Ahora Nacion": 12, "Podemos Peru": 11,
                 "Fuerza Popular": 10, "Otros": 17,
             },
         },
@@ -185,7 +185,7 @@ def _north_trends() -> list[dict]:
             "date": "2026-02-22",
             "anti_vote_distribution": {
                 "Peru Libre": 32, "Juntos por el Peru": 18,
-                "Alianza Nacional": 14, "Podemos Peru": 10,
+                "Ahora Nacion": 14, "Podemos Peru": 10,
                 "Fuerza Popular": 9, "Otros": 17,
             },
         },
@@ -193,7 +193,7 @@ def _north_trends() -> list[dict]:
             "date": "2026-03-01",
             "anti_vote_distribution": {
                 "Peru Libre": 30, "Juntos por el Peru": 20,
-                "Alianza Nacional": 13, "Podemos Peru": 11,
+                "Ahora Nacion": 13, "Podemos Peru": 11,
                 "Fuerza Popular": 10, "Otros": 16,
             },
         },
@@ -201,7 +201,7 @@ def _north_trends() -> list[dict]:
             "date": "2026-03-08",
             "anti_vote_distribution": {
                 "Peru Libre": 31, "Juntos por el Peru": 19,
-                "Alianza Nacional": 12, "Podemos Peru": 11,
+                "Ahora Nacion": 12, "Podemos Peru": 11,
                 "Fuerza Popular": 10, "Otros": 17,
             },
         },

@@ -80,22 +80,8 @@ PARTIES: dict[str, dict] = {
             {"name": "Veronika Mendoza", "nickname": "Vero", "role": "Excongresista, lider historica de la izquierda"},
         ],
     },
-    "ap": {
-        "abbreviation": "ap",
-        "name": "Accion Popular",
-        "leader": "Varios",
-        "color": "#4CAF50",
-        "positions": {
-            "economy": 0,
-            "social": 0,
-            "authority": 0,
-            "corruption": 1,
-            "environment": 0,
-        },
-        "notable_figures": [
-            {"name": "Edmundo del Aguila", "nickname": None, "role": "Exsecretario general"},
-        ],
-    },
+    # Accion Popular (ap) — ELIMINADO de elecciones 2026 por el JNE
+    # (nulidad de primarias por irregularidades graves, Res. 2025-12-13)
     "sc": {
         "abbreviation": "sc",
         "name": "Somos Peru",
@@ -129,7 +115,7 @@ PARTIES: dict[str, dict] = {
     },
     "an": {
         "abbreviation": "an",
-        "name": "Alianza Nacional",
+        "name": "Ahora Nacion",
         "leader": "Varios",
         "color": "#3F51B5",
         "positions": {
